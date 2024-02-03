@@ -28,11 +28,18 @@ export default function Home() {
         values: ['Admin', 'User'],
         required: true,
     },
-    // 'Select Date': {
-    //     value: '',
-    //     type: 'datepicker',
-    //     required: true
-    // }
+    Note: {
+      value: '',
+      type: 'textarea',
+      placeholder: 'Enter your note',
+      required: true,
+      height: '300px'
+    },
+    'Select Date': {
+        value: '',
+        type: 'datepicker',
+        required: true
+    }
   })
 
   const onSubmit = (form) => {

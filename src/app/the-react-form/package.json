@@ -6,6 +6,10 @@
   "scripts": {
     "test": "npm run test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MERTULAS/the-react-form/blob/master/src/app/the-react-form/index.js"
+  },
   "keywords": [
     "react",
     "next",

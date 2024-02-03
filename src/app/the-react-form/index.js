@@ -3,14 +3,14 @@
 
 import React, { useState } from 'react'
 import { Input, Select, Button, Radio, DatePicker } from 'antd'
+const { TextArea } = Input;
+import './style.css';
 
 const TheForm = ({formSettings = {}, onSubmit}) => {
     const [isFormValid, setFormValidState] = useState(false);
     const [formObject, setFormObject] = useState(formSettings);
 
     const handleSubmit = (e) => {
-        console.log(formObject);
-
         const tempformObject = {...formObject};
         
         let isValid = true;
@@ -29,7 +29,9 @@ const TheForm = ({formSettings = {}, onSubmit}) => {
         setFormObject(tempformObject);
 
         if (isValid) {
-            onSubmit(formObject);
+            const returnedObject = {};
+            Object.keys(formObject).forEach(formKey => returnedObject[formKey] = formObject[formKey].value);
+            onSubmit(returnedObject);
         }
     }
 
@@ -39,17 +41,16 @@ const TheForm = ({formSettings = {}, onSubmit}) => {
             value: val
         }};
 
-        console.log(tempformObject);
         setFormObject(tempformObject);
     } 
 
     return (
-        <div>
+        <div className='the-form'>
             {Object.keys(formObject).map(formKey => {
                 if (formObject[formKey].type === 'radio') {
                     return <div key={formKey}>
                         <p>{formKey}: </p>
-                        <Radio.Group {...formObject[formKey]} onChange={e => handleChange(e.target.value, formKey)}>
+                        <Radio.Group {...formObject[formKey]} onChange={e => handleChange(e.target.value, formKey)} >
                             {formObject[formKey].values.map(radioValue => <Radio key={radioValue} value={radioValue}> {radioValue} </Radio>)}
                         </Radio.Group>
                 </div>
@@ -60,19 +61,26 @@ const TheForm = ({formSettings = {}, onSubmit}) => {
                         <p>{formKey}: </p>
                         <Select 
                             {...formObject[formKey]}
-                            style={{width: '200px'}} 
+                            style={{width: '100%'}}
                             defaultValue={formObject[formKey].value} 
                             options={formObject[formKey].values.map(val => ({value:val , label: val}))} 
                             onChange={newVal => handleChange(newVal, formKey)} />
                     </div>
                 }
 
-                // else if (formObject[formKey].type === 'datepicker') {
-                //     return <div key={formKey}>
-                //         <p>{formKey}: </p>
-                //         <DatePicker {...formObject[formKey]} onChange={(date, dateString) => handleChange(dateString, formKey)} style={{width: '100%'}} />
-                //     </div>
-                // }
+                else if (formObject[formKey].type === 'textarea') {
+                    return <div key={formKey}>
+                        <p>{formKey}: </p>
+                        <TextArea {...formObject[formKey]} allowClear onChange={e => handleChange(e.target.value, formKey)} style={{height: formObject[formKey].height}}/>
+                    </div>
+                }
+
+                else if (formObject[formKey].type === 'datepicker') {
+                    return <div key={formKey}>
+                        <p>{formKey}: </p>
+                        <DatePicker {...formObject[formKey]} onChange={(date, _) => handleChange(date, formKey)} style={{width: '100%'}} />
+                    </div>
+                }
 
                 return <div key={formKey}>
                     <p>{formKey}: </p>

@@ -1,0 +1,11 @@
+.the-form {
+    display: flex;
+    flex-direction: column;
+    color: black;
+    gap: 10px;
+    width: 300px;
+}
+
+.the-form p {
+    padding: 6px 0;
+}
