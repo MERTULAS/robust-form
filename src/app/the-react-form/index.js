@@ -2,13 +2,15 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Input, Select, Button, Radio, DatePicker } from 'antd'
+import { UploadOutlined } from '@ant-design/icons';
+import { Input, Select, Button, Radio, DatePicker, Upload } from 'antd'
 const { TextArea } = Input;
 import './style.css';
 
-const TheForm = ({formSettings = {}, onSubmit}) => {
-    const [isFormValid, setFormValidState] = useState(false);
+const TheForm = ({formSettings = {}, onSubmit, elementTypes = 'outlined', CTAButtonTitle='Submit', inValidMessage='The fields shown are required! Please fill in.'}) => {
+    const [isFormValid, setFormValidState] = useState(null);
     const [formObject, setFormObject] = useState(formSettings);
+    const [fileList, setFileList] = useState([]);
 
     const handleSubmit = (e) => {
         const tempformObject = {...formObject};
@@ -38,11 +40,36 @@ const TheForm = ({formSettings = {}, onSubmit}) => {
     const handleChange = (val, formKey) => {
         const tempformObject = {...formObject, [formKey]: {
             ...formObject[formKey],
-            value: val
+            value: val,
+            status: status === 'error' && val === '' ? 'error' : ''
         }};
 
         setFormObject(tempformObject);
-    } 
+    }
+
+    const handleUpload = (file, formKey) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const fileContent = event.target.result;
+          setFormObject({...formObject, [formKey]: {
+            ...formObject[formKey],
+            value: fileContent
+          }})
+        };
+        reader.readAsText(file);
+      };
+    
+      // Dosya değişikliği durumunda gerçekleştirilecek işlemler
+    const handleUploadChange = (info) => {
+        let fileList = [...info.fileList];
+    
+        // Sadece son eklenen dosyayı al
+        fileList = fileList.slice(-1);
+
+        console.log(fileList);
+    
+        setFileList(fileList);
+      };
 
     return (
         <div className='the-form'>
@@ -64,30 +91,49 @@ const TheForm = ({formSettings = {}, onSubmit}) => {
                             style={{width: '100%'}}
                             defaultValue={formObject[formKey].value} 
                             options={formObject[formKey].values.map(val => ({value:val , label: val}))} 
-                            onChange={newVal => handleChange(newVal, formKey)} />
+                            onChange={newVal => handleChange(newVal, formKey)} 
+                            variant={elementTypes}
+                            />
                     </div>
                 }
 
                 else if (formObject[formKey].type === 'textarea') {
                     return <div key={formKey}>
                         <p>{formKey}: </p>
-                        <TextArea {...formObject[formKey]} allowClear onChange={e => handleChange(e.target.value, formKey)} style={{height: formObject[formKey].height}}/>
+                        <TextArea {...formObject[formKey]} allowClear onChange={e => handleChange(e.target.value, formKey)} style={{height: formObject[formKey].height}} variant={elementTypes} />
                     </div>
                 }
 
                 else if (formObject[formKey].type === 'datepicker') {
                     return <div key={formKey}>
                         <p>{formKey}: </p>
-                        <DatePicker {...formObject[formKey]} onChange={(date, _) => handleChange(date, formKey)} style={{width: '100%'}} />
+                        <DatePicker {...formObject[formKey]} onChange={(date, _) => handleChange(date, formKey)} style={{width: '100%'}} variant={elementTypes} />
+                    </div>
+                }
+
+                else if (formObject[formKey].type === 'password') {
+                    return <div key={formKey}>
+                        <p>{formKey}: </p>
+                        <Input.Password {...formObject[formKey]} onChange={e => handleChange(e.target.value, formKey)} variant={elementTypes} />
+                    </div>
+                }
+
+                else if (formObject[formKey].type === 'upload') {
+                    return <div key={formKey}>
+                        <p>{formKey}: </p>
+                        <Upload onChange={handleUploadChange} beforeUpload={file => handleUpload(file, formKey)} fileList={fileList}>
+                            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                        </Upload>
                     </div>
                 }
 
                 return <div key={formKey}>
                     <p>{formKey}: </p>
-                    <Input {...formObject[formKey]} onChange={e => handleChange(e.target.value, formKey)} />
+                    <Input {...formObject[formKey]} onChange={e => handleChange(e.target.value, formKey)} variant={elementTypes} />
                 </div>
             })}
-            <Button onClick={handleSubmit}>Submit</Button>
+            {isFormValid === false ? <p className='error-message'>{inValidMessage}</p> : <></>}
+            <Button onClick={handleSubmit} type='primary' className='cta-button'>{CTAButtonTitle}</Button>
         </div>
     )
 }

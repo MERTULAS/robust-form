@@ -1,14 +1,21 @@
 'use client'
 import styles from "./page.module.css";
 import TheForm from "./the-react-form";
+// import TheForm from "the-react-form";
 import React, {useState} from "react";
 
 export default function Home() {
   const [formObject, setFormObject] = useState({
     Name: {
-        value: 'm',
+        value: '',
         placeholder: 'Enter your name',
         required: true,
+    },
+    Password: {
+      value: '',
+      placeholder: 'Enter your password',
+      required: true,
+      type: 'password'
     },
     Surname: {
         value: '',
@@ -39,16 +46,23 @@ export default function Home() {
         value: '',
         type: 'datepicker',
         required: true
+    },
+    'Upload CV': {
+        required: true,
+        type: 'upload',
+        value: ''
     }
   })
 
   const onSubmit = (form) => {
     console.log(form, 'submit');
+
+    // Request here with 'form'.
   }
 
   return (
     <main className={styles.main}>
-      <TheForm formSettings={formObject} onSubmit={onSubmit}/>
+      <TheForm formSettings={formObject} onSubmit={onSubmit} CTAButtonTitle="Submit Form!" />
     </main>
   );
 }

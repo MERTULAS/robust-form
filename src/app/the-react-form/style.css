@@ -9,3 +9,7 @@
 .the-form p {
     padding: 6px 0;
 }
+
+.error-message {
+    color: red;
+}
