@@ -1,0 +1,21 @@
+{
+  "name": "the-react-form",
+  "version": "0.1.1",
+  "description": "React form component for generally usage.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "keywords": [
+    "react",
+    "next",
+    "form",
+    "react-form",
+    "next-form"
+  ],
+  "author": "Mert ULAS",
+  "license": "ISC",
+  "dependencies": {
+    "antd": "^5.13.3"
+  }
+}

@@ -1,5 +1,6 @@
 .main {
   display: flex;
+  background-color: whitesmoke;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
