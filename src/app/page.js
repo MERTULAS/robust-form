@@ -5,6 +5,7 @@ import TheForm from "./the-react-form";
 import React, {useState} from "react";
 
 export default function Home() {
+  const [form, setForm] = useState({})
   const [formObject, setFormObject] = useState({
     Name: {
         value: '',
@@ -57,12 +58,14 @@ export default function Home() {
   const onSubmit = (form) => {
     console.log(form, 'submit');
 
+    setForm(form)
     // Request here with 'form'.
   }
 
   return (
     <main className={styles.main}>
       <TheForm formSettings={formObject} onSubmit={onSubmit} CTAButtonTitle="Submit Form!" />
+      {form['Upload CV']}
     </main>
   );
 }
