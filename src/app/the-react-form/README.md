@@ -16,6 +16,7 @@ NOTE: Keys indicate form labels.
 		-- 'radio'
 		-- 'textarea'
 		-- 'datepicker'
+		-- 'upload'
 	```
 	const formObject = {
 		Name: {
@@ -53,19 +54,25 @@ NOTE: Keys indicate form labels.
 			value:  '',
 			type:  'datepicker',
 			required:  true
-		}
+		},
+		'Upload CV': {
+			required: true,
+			type: 'upload',
+			value: ''
+    	}
 	}
 	```
 - onSubmit 
 -- It is triggered by the call to action button, and if the form is valid, it is the triggered function. Returns the filled form values as a object.
 ```
 {
-    Name: "Mert"
-    Note: "Hello world."
-    Password: "123456"
-    Select Date: M {$L:  'en',  $u:  undefined,  $d:  Wed Feb 07 2024 17:41:17 GMT+0300 (GMT+03:00),  $y:  2024,  $M:  1, …}
-    Select Gender: "Male"
-    User Type: "Admin"
+    'Name': "Mert"
+    'Note': "Hello world."
+    'Password': "123456"
+    'Select Date': M {$L:  'en',  $u:  undefined,  $d:  Wed Feb 07 2024 17:41:17 GMT+0300 (GMT+03:00),  $y:  2024,  $M:  1, …}
+    'Select Gender': "Male"
+    'User Type': "Admin",
+	'Upload CV': "data:application/pdf;base64,JVBERi0xLjUKJb/3ov4K..."
 }
 ```
 NOTE: Date value returned as a 'moment' object.

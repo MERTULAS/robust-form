@@ -65,7 +65,9 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <TheForm formSettings={formObject} onSubmit={onSubmit} CTAButtonTitle="Submit Form!" />
-      {form['Upload CV']}
+      <object data={form['Upload CV']}
+            type="application/pdf" width="1000px" height="800px">
+      </object>
     </main>
   );
 }

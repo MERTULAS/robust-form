@@ -10,7 +10,7 @@ import './style.css';
 const TheForm = ({formSettings = {}, onSubmit, elementTypes = 'outlined', CTAButtonTitle='Submit', inValidMessage='The fields shown are required! Please fill in.'}) => {
     const [isFormValid, setFormValidState] = useState(null);
     const [formObject, setFormObject] = useState(formSettings);
-    const [fileList, setFileList] = useState([]);
+    const [file, setFile] = useState({});
 
     const handleSubmit = (e) => {
         const tempformObject = {...formObject};
@@ -47,28 +47,22 @@ const TheForm = ({formSettings = {}, onSubmit, elementTypes = 'outlined', CTABut
         setFormObject(tempformObject);
     }
 
-    const handleUpload = (file, formKey) => {
+    const handleUpload = (file, formKey) => {        
         const reader = new FileReader();
-        reader.onload = (event) => {
-          const fileContent = event.target.result;
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          let json = JSON.stringify({ dataURL: reader.result });
+          let fileURL = JSON.parse(json).dataURL;
           setFormObject({...formObject, [formKey]: {
-            ...formObject[formKey],
-            value: fileContent
-          }})
-        };
-        reader.readAsText(file);
+                ...formObject[formKey],
+                value: fileURL
+            }});
       };
+    }
     
-      // Dosya değişikliği durumunda gerçekleştirilecek işlemler
     const handleUploadChange = (info) => {
-        let fileList = [...info.fileList];
-    
-        // Sadece son eklenen dosyayı al
-        fileList = fileList.slice(-1);
-
-        console.log(fileList);
-    
-        setFileList(fileList);
+        const file = info.fileList[0];
+        setFile(file);
       };
 
     return (
@@ -121,7 +115,7 @@ const TheForm = ({formSettings = {}, onSubmit, elementTypes = 'outlined', CTABut
                 else if (formObject[formKey].type === 'upload') {
                     return <div key={formKey}>
                         <p>{formKey}: </p>
-                        <Upload onChange={handleUploadChange} beforeUpload={file => handleUpload(file, formKey)} fileList={fileList}>
+                        <Upload onChange={handleUploadChange} beforeUpload={file => handleUpload(file, formKey)} maxCount={1} >
                             <Button icon={<UploadOutlined />}>Click to Upload</Button>
                         </Upload>
                     </div>
